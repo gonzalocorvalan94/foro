@@ -6,3 +6,10 @@ export const createUser = async(username, email, password)=>{
   )
   return result.insertId;
 }
+
+export const getUserByEmail = async(email)=>{
+  const [rows] = await pool.query(
+    'SELECT * FROM users WHERE Email = ?', [email]
+  )
+  return rows[0];
+}
