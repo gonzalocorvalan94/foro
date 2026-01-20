@@ -5,6 +5,7 @@ import cors from 'cors';
 import globalErrorHandler from './middlewares/errorMiddleware.js';
 import userRoutes from './routes/userRoutes.js';
 import AppError from './utils/AppError.js';
+import threadRoutes from './routes/threadRoutes.js'
 
 
 const app = express();
@@ -15,6 +16,7 @@ app.use(helmet());
 app.use(cors());
 
 app.use('/api/v1/users', userRoutes)
+app.use('/api/v1/threads', threadRoutes)
 
 app.use((req, res, next) => {
   next(new AppError(`No se pudo encontrar ${req.originalUrl} en este servidor`, 404));

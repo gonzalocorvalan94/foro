@@ -2,6 +2,7 @@ import { createUser, getUserByEmail } from '../models/userModel.js';
 import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/AppError.js';
 import bcrypt from 'bcryptjs'; // 1. Importar la librería
+import jwt from 'jsonwebtoken';
 
 export const register = catchAsync(async (req, res, next) => {
   const { username, email, password } = req.body;
@@ -42,16 +43,15 @@ export const login = catchAsync(async (req, res, next) => {
     return next(new AppError('Email o contraseña incorrectos', 401));
   }
 
-  // 4. Enviar respuesta exitosa
+  //4. Aplicar el JTW
+  const token = jwt.sign({ id: user.ID }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+
+  // 5. Enviar respuesta exitosa
   res.status(200).json({
     status: 'success',
-    message: 'Login exitoso',
-    data: {
-      user: {
-        id: user.id,
-        username: user.Username,
-        email: user.Email,
-      },
-    },
+    token, // <--- El cliente ahora recibe esto
+    data: { user: { id: user.ID, username: user.Username } },
   });
 });
