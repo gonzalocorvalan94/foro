@@ -17,7 +17,25 @@ const pool = mysql.createPool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  connectionLimit: 10
+  ssl: {
+    rejectUnauthorized: false
+  },
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
+// Al final de tu archivo de base de datos
+const testConnection = async () => {
+  try {
+    const connection = await pool.getConnection();
+    console.log('✅ ¡Conexión exitosa a TiDB Cloud!');
+    connection.release();
+  } catch (err) {
+    console.error('❌ Error crítico de conexión:', err.message);
+    console.error('Código de error:', err.code); // Esto nos dirá si es "ETIMEDOUT", "ECONNREFUSED", etc.
+  }
+};
+
+testConnection();
 export default pool;
