@@ -10,6 +10,9 @@ import catchAsync from '../utils/catchAsync.js';
 import { getRepliesByThreadId } from '../models/replyModel.js';
 
 export const createNewThread = catchAsync(async (req, res, next) => {
+   console.log('Body recibido:', req.body);      // ← agregá esto
+  console.log('Usuario:', req.user); 
+  
   const { title, content, categoryId } = req.body;
 
   if (!title || !content || !categoryId) {
