@@ -1,10 +1,9 @@
 import pool from '../config/db.js';
 
-// 1. CREAR (No se toca, el JOIN no hace falta acá)
-export const createThread = async (Title, Content, userId, categoryId) => {
+export const createThread = async (title, content, userId, categoryId) => {
   const [result] = await pool.query(
     'INSERT INTO threads (Title, Content, user_id, category_id) VALUES (?, ?, ?, ?)',
-    [Title, Content, userId, categoryId]
+    [title, content, userId, categoryId]
   );
   return result.insertId;
 };
