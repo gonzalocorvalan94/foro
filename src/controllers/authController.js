@@ -59,9 +59,14 @@ export const login = catchAsync(async (req, res, next) => {
 });
 
 export const getMe = catchAsync(async (req, res, next) => {
-  // req.user lo setea el middleware protect (ver abajo)
   res.status(200).json({
     status: 'success',
-    data: { user: req.user }
+    data: { 
+      user: {
+        id: req.user.ID,
+        username: req.user.Username,
+        role: req.user.Role
+      }
+    }
   });
 });
