@@ -46,18 +46,3 @@ export const deleteReply = async(id)=>{
 }
 
 
-//esta funcion es para eliminar las fotos que los usuarios eliminaron. ASi no quedan ocpando espacio
-export const deleteFile = async (relativeUrl) => {
-  if (!relativeUrl) return;
-
-  // Construimos la ruta absoluta (desde la raíz del proyecto hasta la carpeta public)
-  const filePath = path.join(process.cwd(), 'public', relativeUrl);
-  
-  try {
-    await fs.unlink(filePath);
-    console.log(`Archivo eliminado: ${filePath}`);
-  } catch (err) {
-    // Si el archivo no existe, no pasa nada, seguimos
-    console.error(`No se pudo borrar el archivo: ${err.message}`);
-  }
-};
