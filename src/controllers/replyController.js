@@ -8,6 +8,7 @@ import catchAsync from '../utils/catchAsync.js';
 import { getThreadById } from '../models/threadModel.js';
 import AppError from '../utils/AppError.js';
 import { createNotification } from '../models/notificationModel.js';
+import { deleteFile } from '../models/replyModel.js';
 
 export const createNewReply = catchAsync(async (req, res, next) => {
   console.log('--- NUEVA RESPUESTA ---');
