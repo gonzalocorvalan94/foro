@@ -4,8 +4,8 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendWelcomeEmail = async (email, username) => {
   try {
-    await resend.emails.send({
-      from: 'Instituto Foro <onboarding@resend.dev>', // dominio propio opcional
+    const result = await resend.emails.send({
+      from: 'Instituto Foro <onboarding@resend.dev>',
       to: email,
       subject: '¡Bienvenido al Instituto Foro!',
       html: `
@@ -17,8 +17,8 @@ export const sendWelcomeEmail = async (email, username) => {
         </div>
       `
     });
+    console.log('Email enviado:', result);
   } catch (error) {
-    // No cortamos el registro si falla el email
-    console.error('Error al enviar email de bienvenida:', error);
+    console.error('Error completo email:', error);
   }
 };
