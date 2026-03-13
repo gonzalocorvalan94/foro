@@ -12,18 +12,20 @@ export const createReply = async (content, userId, threadId, parentReplyId, imag
 
 export const getRepliesByThreadId = async (threadId) => {
   const [rows] = await pool.query(
-  `SELECT 
-    r.ID, 
-    r.Content, 
-    r.Created_at, 
-    r.parent_reply_id, 
-    r.Image_url,  -- <--- ¡ESTA ES LA QUE FALTA AGREGAR!
-    u.username AS authorName 
-   FROM replies r
-   JOIN users u ON r.user_id = u.ID
-   WHERE r.thread_id = ?`,
-  [threadId]
-);
+    `SELECT 
+      r.ID, 
+      r.Content, 
+      r.Created_at, 
+      r.parent_reply_id, 
+      r.Image_url,
+      r.user_id,
+      u.Username AS authorName 
+     FROM replies r
+     JOIN users u ON r.user_id = u.ID
+     WHERE r.thread_id = ?
+     ORDER BY r.Created_at ASC`,
+    [threadId]
+  );
   return rows;
 };
 
