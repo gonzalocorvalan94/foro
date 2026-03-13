@@ -1,12 +1,18 @@
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD,
+  },
+});
 
 export const sendWelcomeEmail = async (email, username) => {
-   console.log('Intentando enviar email a:', email);
+  console.log('Intentando enviar email a:', email);
   try {
-    const result = await resend.emails.send({
-      from: 'Instituto Foro <onboarding@resend.dev>',
+    const result = await transporter.sendMail({
+      from: `"Instituto Foro" <${process.env.GMAIL_USER}>`,
       to: email,
       subject: '¡Bienvenido al Instituto Foro!',
       html: `
@@ -16,10 +22,10 @@ export const sendWelcomeEmail = async (email, username) => {
           <p>Ya podés explorar los temas, crear hilos y participar en las discusiones.</p>
           <p style="color: #888; font-size: 0.85rem; margin-top: 30px;">Si no creaste esta cuenta, ignorá este mensaje.</p>
         </div>
-      `
+      `,
     });
-    console.log('Resultado completo:', JSON.stringify(result));
+    console.log('Email enviado:', result.messageId);
   } catch (error) {
-    console.error('Error completo email:', JSON.stringify(error));
+    console.error('Error completo email:', error);
   }
 };
