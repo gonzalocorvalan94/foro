@@ -3,6 +3,7 @@ import { Resend } from 'resend';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendWelcomeEmail = async (email, username) => {
+   console.log('Intentando enviar email a:', email);
   try {
     const result = await resend.emails.send({
       from: 'Instituto Foro <onboarding@resend.dev>',
@@ -17,8 +18,8 @@ export const sendWelcomeEmail = async (email, username) => {
         </div>
       `
     });
-    console.log('Email enviado:', result);
+    console.log('Resultado completo:', JSON.stringify(result));
   } catch (error) {
-    console.error('Error completo email:', error);
+    console.error('Error completo email:', JSON.stringify(error));
   }
 };
