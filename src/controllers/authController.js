@@ -3,6 +3,7 @@ import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/AppError.js';
 import bcrypt from 'bcryptjs'; // 1. Importar la librería
 import jwt from 'jsonwebtoken';
+import { sendWelcomeEmail } from '../utils/emailService.js';
 
 
 
@@ -13,13 +14,11 @@ export const register = catchAsync(async (req, res, next) => {
     return next(new AppError('Por favor, completa todos los campos', 400));
   }
 
-  // 2. ENCRIPTACIÓN:
-  // El '12' es el "cost factor". Cuanto más alto, más seguro pero más lento.
-  // 12 es el equilibrio perfecto hoy en día.
   const hashedPassword = await bcrypt.hash(password, 12);
-
-  // 3. Mandamos la contraseña ENCRIPTADA al modelo, no la original
   const newUserId = await createUser(username, email, hashedPassword);
+
+  // Enviamos el email de bienvenida (no bloqueamos si falla)
+  await sendWelcomeEmail(email, username);
 
   res.status(201).json({
     status: 'success',
@@ -70,3 +69,4 @@ export const getMe = catchAsync(async (req, res, next) => {
     }
   });
 });
+
