@@ -18,7 +18,7 @@ export const register = catchAsync(async (req, res, next) => {
   const newUserId = await createUser(username, email, hashedPassword);
 
   // Enviamos el email de bienvenida (no bloqueamos si falla)
-  await sendWelcomeEmail(email, username);
+  sendWelcomeEmail(email, username).catch(err => console.error('Email falló:', err));
 
   res.status(201).json({
     status: 'success',
