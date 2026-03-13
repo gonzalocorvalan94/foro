@@ -56,3 +56,16 @@ export const deleteThread = async (ID) => {
   const [result] = await pool.query('DELETE FROM threads WHERE ID = ?', [ID]);
   return result.affectedRows;
 };
+
+export const getThreadsByCategory = async (categoryId, limit, offset) => {
+  const [rows] = await pool.query(
+    `SELECT t.*, u.Username as authorName 
+     FROM threads t 
+     JOIN users u ON t.user_id = u.ID
+     WHERE t.category_id = ?
+     ORDER BY t.created_at DESC 
+     LIMIT ? OFFSET ?`,
+    [categoryId, limit, offset]
+  );
+  return rows;
+};

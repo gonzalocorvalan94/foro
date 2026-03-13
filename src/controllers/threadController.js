@@ -8,6 +8,7 @@ import {
 import AppError from '../utils/AppError.js';
 import catchAsync from '../utils/catchAsync.js';
 import { getRepliesByThreadId } from '../models/replyModel.js';
+import { getThreadsByCategory } from '../models/threadModel.js';
 
 export const createNewThread = catchAsync(async (req, res, next) => {
    console.log('Body recibido:', req.body);      // ← agregá esto
@@ -123,5 +124,22 @@ export const getThreadDetails = catchAsync(async (req, res, next) => {
       repliesCount: replies.length,
       replies,
     },
+  });
+});
+
+export const getThreadsByCategoryController = catchAsync(async (req, res, next) => {
+  const { categoryId } = req.params;
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const offset = (page - 1) * limit;
+
+  const threads = await getThreadsByCategory(categoryId, limit, offset);
+
+  res.status(200).json({
+    status: 'success',
+    results: threads.length,
+    page,
+    limit,
+    data: { threads },
   });
 });

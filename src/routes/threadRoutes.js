@@ -14,11 +14,13 @@ import {
   deleteReplyController,
 } from '../controllers/replyController.js';
 import { upload } from '../utils/multerConfig.js';
+import { getThreadsByCategoryController } from '../controllers/threadController.js';
 
 const router = express.Router();
 
 router.get('/', getAllThreadsController);
 router.get('/:id', protect, getThreadDetails);        // ← eliminé el duplicado (getOneThread)
+router.get('/category/:categoryId', protect, getThreadsByCategoryController);
 router.post('/', protect, createNewThread);
 router.post('/:threadId/replies', protect, upload.single('image'), createNewReply);
 router.patch('/:id', protect, updateThreadController);

@@ -10,6 +10,7 @@ import userRoutes from './routes/userRoutes.js';
 import threadRoutes from './routes/threadRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import AppError from './utils/AppError.js';
+import categoryRoutes from './routes/categoryRoutes.js';
 
 // Configuración de rutas para módulos ES (importante para path.join)
 const app = express();
@@ -38,6 +39,7 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/threads', threadRoutes);
+app.use('/api/v1/categories', categoryRoutes);
 
 // 4. MANEJO DE RUTAS NO ENCONTRADAS (404)
 // Debe ir DESPUÉS de las rutas y los estáticos
