@@ -21,3 +21,20 @@ export const getAllUsersFromDB = async () => {
   );
   return rows;
 };
+
+export const getUserByUsername = async (username) => {
+  const [rows] = await pool.query('SELECT * FROM users WHERE Username = ?', [username]);
+  return rows[0];
+};
+
+export const createUserWithSecurity = async (username, email, hashedPassword, question, hashedAnswer) => {
+  const [result] = await pool.query(
+    'INSERT INTO users (Username, Email, Password, Security_question, Security_answer) VALUES (?, ?, ?, ?, ?)',
+    [username, email, hashedPassword, question, hashedAnswer]
+  );
+  return result.insertId;
+};
+
+export const updatePassword = async (userId, hashedPassword) => {
+  await pool.query('UPDATE users SET Password = ? WHERE ID = ?', [hashedPassword, userId]);
+};
