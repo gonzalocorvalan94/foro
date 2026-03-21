@@ -29,15 +29,19 @@ export const register = catchAsync(async (req, res, next) => {
   }
 
   const existingUser = await getUserByEmail(email);
-  
   if (existingUser) {
     return next(new AppError('El email ya está registrado', 400));
+  }
+
+  // ← agregá esto
+  const existingUsername = await getUserByUsername(username);
+  if (existingUsername) {
+    return next(new AppError('El nombre de usuario ya está en uso', 400));
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
   const newUserId = await createUser(username, email, hashedPassword);
 
-  // Enviamos el email de bienvenida (no bloqueamos si falla)
   sendWelcomeEmail(email, username).catch((err) =>
     console.error('Email falló:', err)
   );
